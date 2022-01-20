@@ -39,6 +39,9 @@ const userSchema = new mongoose.Schema({
         default: "",
         maxlength: 1000,
     },
+    likes: {
+        type: [String]
+      },
     website: { type: String, default: "" },
     followers:  {
         type: Array,

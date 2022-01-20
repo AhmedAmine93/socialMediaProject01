@@ -1,25 +1,40 @@
 const Users = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 
-const auth = async(req, res, next) => {
-    try {
-        const token = req.cookies.jwt;
-
-        if (!token) return res.status(400).json({ msg: "Invalid Authentication." });
-
-        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-        if (!decoded)
-            return res.status(400).json({ msg: "Invalid Authentication." });
-
-        const user = await Users.findOne({ _id: decoded.id });
-
-        req.user = user;
-        next();
-    } catch (err) {
-        return res.status(500).json({ msg: err.message });
+module.exports.checkUser = (req, res, next) => {
+    const token = req.cookies.jwt;
+    if (token) {
+      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decodedToken) => {
+        if (err) {
+          res.locals.user = null;
+          res.cookie("jwt", "", { maxAge: 1 });
+          next();
+        } else {
+          let user = await Users.findOne({_id:decodedToken.id});
+          res.locals.user = user;
+          next();
+        }
+      });
+    } else {
+      res.locals.user = null;
+      next();
     }
-};
-
-
-
-module.exports = auth;
+  };
+  
+  module.exports.requireAuth = (req, res, next) => {
+    const token = req.cookies.jwt;
+    if (token) {
+      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decodedToken) => {
+        if (err) {
+          console.log(err);
+          res.send(200).json('pas de token')
+        } else {
+          console.log(decodedToken.id);
+          next();
+        }
+      });
+    } else {
+      console.log('pas de token');
+    }
+  };
+  

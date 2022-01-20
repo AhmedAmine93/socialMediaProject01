@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const PostSchema = new Schema(
+const PostSchema = new mongoose.Schema(
   {
     posterId: {
       type: String,
