@@ -3,8 +3,8 @@ const postCtrol = require('../controlles/post.control');
 const multer = require("multer");
 const upload = multer();
  // crud postes
-router.get('/', postCtrol.readPost);
-router.post('/', postCtrol.createPost);
+router.get('/post', postCtrol.readPost);
+router.post('/post', postCtrol.createPost);
 router.put('/:id', postCtrol.updatePost);
 router.delete('/:id', postCtrol.deletePost);
 router.patch('/like/:id', postCtrol.likePost);

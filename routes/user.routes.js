@@ -4,14 +4,14 @@ const user_control = require("../controlles/user.control");
 
 
 // auth
-router.post("/enregistrement", auth_control.inscription);
+router.post("/", auth_control.inscription).get("/page-principale", user_control.getAllUsers);
 router.post("/login", auth_control.login);
 router.get("/logout", auth_control.logout);
 
 
 //users
 
-router.get("/", user_control.getAllUsers);
+// router.get("/page-principale", user_control.getAllUsers);
 router.get("/:id",  user_control.getUser);
 router.delete("/:id", user_control.deleteUser);
 router.put("/:id",  user_control.updateUser);
