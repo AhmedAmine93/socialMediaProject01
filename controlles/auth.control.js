@@ -32,7 +32,7 @@ module.exports.inscription = async(req, res) => {
             username: newUserName,
             email,
             password: passwordHash,
-            gender,
+           
         });
 
        

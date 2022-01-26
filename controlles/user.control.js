@@ -2,6 +2,18 @@ const Users = require("../models/user.model");
 const ObjectID = require("mongoose").Types.ObjectId;
 
 const userCtrol = {
+ findPeople : (req, res) => {
+    let following = req.profile.following;
+    following.push(req.profile._id);
+    Users.find({ _id: { $nin: following } }, (err, users) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            });
+        }
+        res.json(users);
+    }).select('name');
+},
     getAllUsers: async(req, res) => {
         const users = await Users.find().select("-password");
         res.status(200).json(users);
@@ -138,6 +150,17 @@ const userCtrol = {
             return res.status(500).json({ msg: err.message });
         }
     },
+    hasAuthorization :(req, res, next) => {
+      let sameUser = req.profile && req.auth && req.profile._id == req.auth._id;
+      let adminUser = req.profile && req.auth && req.auth.role === 'admin';
+      const authorized = sameUser || adminUser;
+      if (!authorized) {
+          return res.status(403).json({
+              error: 'User is not authorized to perform this action'
+          });
+      }
+      next();
+  },
 };
 
 module.exports = userCtrol;

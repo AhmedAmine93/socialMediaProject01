@@ -1,24 +1,11 @@
-import React, { Component } from "react";
-import {Route} from "react-router-dom";
-import home from "./pages/home";
-import message from "./pages/message";
-import LoginAndSignup from './pages/loginAndSignup';
-import "./App.css" ;
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import MainRouter from "./MainRouter";
 
-
-
-
-class App extends Component {
-    render(){
-    return( 
-    <div>
-    <Route path="/post" component={home} exact/>
-    <Route path="/chats" component={message} />
-    <Route path="/login" component={LoginAndSignup} exact/>    
-        
-        </div>
-    );
-}
-}
+const App = () => (
+    <BrowserRouter>
+        <MainRouter />
+    </BrowserRouter>
+);
 
 export default App;
